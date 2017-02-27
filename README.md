@@ -13,3 +13,15 @@ Import HELP:
 4. Select the Android-WardrobeApp folder INSIDE the "root" folder (somewhere above README.md)
 
 5. It should automatically build the Android project, but if it asks for anything again select "gradle"
+
+IF your VCS (Git) isn't setup:
+
+1. Open Settings/Preferences
+
+2. Click on Version Control
+
+3. Find the + button and click
+
+4. Choose directory: the OUTER Android-WardrobeApp folder
+
+5. Apply/OK!
