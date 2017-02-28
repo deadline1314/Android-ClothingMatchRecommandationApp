@@ -10,4 +10,97 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="edu.northeastern.wardrobeapp.android_wardrobeapp.UserProfileActivity">
 
+    <TextView
+        android:text="User Profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="15dp"
+        android:id="@+id/up_title" />
+
+    <TextView
+        android:text="Name:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/up_title"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="20dp"
+        android:id="@+id/up_name" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/up_et_name"
+        android:layout_alignBaseline="@+id/up_name"
+        android:layout_alignBottom="@+id/up_name"
+        android:layout_toEndOf="@+id/up_name"
+        android:layout_marginStart="13dp" />
+
+    <TextView
+        android:text="Gender:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/up_et_name"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="16dp"
+        android:id="@+id/up_gender" />
+
+    <RadioButton
+        android:text="Female"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/up_gender_fm"
+        android:layout_alignBaseline="@+id/up_gender_m"
+        android:layout_alignBottom="@+id/up_gender_m"
+        android:layout_alignEnd="@+id/up_et_name" />
+
+    <RadioButton
+        android:text="Male"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/up_gender_m"
+        android:layout_alignBaseline="@+id/up_gender"
+        android:layout_alignBottom="@+id/up_gender"
+        android:layout_toEndOf="@+id/up_title"
+        android:layout_marginStart="10dp" />
+
+    <TextView
+        android:text="Height: "
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="23dp"
+        android:id="@+id/up_height"
+        android:layout_below="@+id/up_gender_m"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="numberSigned"
+        android:ems="10"
+        android:layout_below="@+id/up_gender_fm"
+        android:layout_toEndOf="@+id/up_title"
+        android:layout_marginTop="10dp"
+        android:id="@+id/up_et_height" />
+
+    <TextView
+        android:text="Weight: "
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/up_et_height"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="19dp"
+        android:id="@+id/up_weight" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="numberSigned"
+        android:ems="10"
+        android:layout_below="@+id/up_et_height"
+        android:layout_alignStart="@+id/up_et_height"
+        android:id="@+id/up_et_weight" />
 </RelativeLayout>
