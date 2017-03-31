@@ -2,8 +2,6 @@ package edu.northeastern.wardrobeapp.android_wardrobeapp;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,32 +16,22 @@ public class LoginActivity extends AppCompatActivity {
     private Button btnLogin;
     private EditText editTextEmail;
     private EditText editTextPassword;
+    private TextView linkSignUp;
+
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
-    EditText _emailText;
-    EditText _passwordText;
-    Button _loginButton;
-    TextView _signupLink;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        _emailText = (EditText) findViewById(R.id.input_email);
-        _passwordText = (EditText) findViewById(R.id.input_password);
-        _loginButton = (Button) findViewById(R.id.btn_login);
-        _signupLink = (TextView) findViewById(R.id.link_signup);
+        editTextEmail = (EditText) findViewById(R.id.input_email);
+        editTextPassword = (EditText) findViewById(R.id.input_password);
+        btnLogin = (Button) findViewById(R.id.btn_login);
+        linkSignUp = (TextView) findViewById(R.id.link_signup);
 
-        _loginButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                login();
-            }
-        });
-
-        _signupLink.setOnClickListener(new View.OnClickListener() {
+        linkSignUp.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -56,47 +44,22 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    public void login() {
-        Log.d(TAG, "Login");
-
+    public void login(View view) {
         if (!validate()) {
             onLoginFailed();
             return;
         }
 
-        _loginButton.setEnabled(false);
-
+        // UI stuff
+        btnLogin.setEnabled(false);
         final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
                 R.style.AppTheme_Dark_Dialog);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Authenticating...");
         progressDialog.show();
 
-        String email = _emailText.getText().toString();
-        String password = _passwordText.getText().toString();
+        String email = editTextEmail.getText().toString();
+        String password = editTextPassword.getText().toString();
 
         // TODO: Implement your own authentication logic here.
 
@@ -131,38 +94,41 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onLoginSuccess() {
-        _loginButton.setEnabled(true);
+        btnLogin.setEnabled(true);
         finish();
     }
 
     public void onLoginFailed() {
         Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
 
-        _loginButton.setEnabled(true);
+        btnLogin.setEnabled(true);
     }
 
+    /**
+     * Validate login fields
+     * @return boolean - true if valid
+     */
     public boolean validate() {
         boolean valid = true;
 
-        String email = _emailText.getText().toString();
-        String password = _passwordText.getText().toString();
+        String email = editTextEmail.getText().toString();
+        String password = editTextPassword.getText().toString();
 
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            _emailText.setError("enter a valid email address");
+            editTextEmail.setError("Enter a valid email address");
             valid = false;
         } else {
-            _emailText.setError(null);
+            editTextEmail.setError(null);
         }
-
-        if (password.isEmpty() || password.length() < 4 || password.length() > 10) {
-            _passwordText.setError("between 4 and 10 alphanumeric characters");
+        // Ken: 6 is Firebase's minimum limit
+        if (password.isEmpty() || password.length() < 6) {
+            editTextPassword.setError("Password must be at least 6 characters");
             valid = false;
         } else {
-            _passwordText.setError(null);
+            editTextPassword.setError(null);
         }
 
         return valid;
     }
-
 }
 
