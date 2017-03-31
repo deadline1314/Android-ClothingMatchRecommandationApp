@@ -21,4 +21,6 @@
     <string name="signup_email">Email</string>
     <string name="signup_password">Password</string>
     <string name="sign_up">Sign Up</string>
+    <!-- Menu-related strings -->
+    <string name="menu_sign_out">Sign Out</string>
 </resources>
