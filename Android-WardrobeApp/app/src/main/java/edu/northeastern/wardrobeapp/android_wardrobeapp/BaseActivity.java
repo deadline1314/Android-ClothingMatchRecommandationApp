@@ -13,13 +13,18 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-
+/**
+ * Extend from this class to access all menu/Firebase logic
+ * By Ken
+ */
 public class BaseActivity extends AppCompatActivity {
 
+    // Firebase variables
     protected FirebaseAuth mAuth;
     protected FirebaseAuth.AuthStateListener mAuthListener;
-    protected String userId;
     private StorageReference mStorageRef;
+    // User-related variables
+    protected String userId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -31,7 +36,8 @@ public class BaseActivity extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if (firebaseAuth.getCurrentUser() == null) {
-                    startActivity(new Intent(BaseActivity.this, LoginActivity.class));
+                    // Ken: When no user is detected, ask for login
+                    //startActivity(new Intent(BaseActivity.this, LoginActivity.class));
                 }
             }
         };
