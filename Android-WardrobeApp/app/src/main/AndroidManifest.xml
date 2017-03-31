@@ -28,7 +28,6 @@
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".WardrobeActivity" />
         <activity android:name=".ClothingDetailedViewActivity" />
         <activity android:name=".AddClothingActivity" />
         <activity android:name=".SignupActivity" />
