@@ -35,16 +35,21 @@ public class BaseActivity extends AppCompatActivity {
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if (firebaseAuth.getCurrentUser() == null) {
+                if (firebaseAuth.getCurrentUser() != null) {
+                    userId = firebaseAuth.getCurrentUser().getUid();
+                } else {
                     // Ken: When no user is detected, ask for login
                     //startActivity(new Intent(BaseActivity.this, LoginActivity.class));
                 }
             }
         };
-        // User
-        userId = mAuth.getCurrentUser().getUid();
         // Storage
         mStorageRef = FirebaseStorage.getInstance().getReference();
+    }
+
+    // Firebase functions
+    public boolean isUserLoggedIn() {
+        return userId != null;
     }
 
     @Override
