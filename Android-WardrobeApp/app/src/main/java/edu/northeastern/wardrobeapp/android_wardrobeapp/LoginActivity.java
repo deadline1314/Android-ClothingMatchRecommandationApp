@@ -1,7 +1,9 @@
 package edu.northeastern.wardrobeapp.android_wardrobeapp;
 
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,17 +15,26 @@ import android.content.Intent;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 public class LoginActivity extends AppCompatActivity {
 
-    private Button btnLogin;
-    private EditText editTextEmail;
-    private EditText editTextPassword;
+    //private Button btnLogin;
+    //private EditText editTextEmail;
+    //private EditText editTextPassword;
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
     EditText _emailText;
     EditText _passwordText;
     Button _loginButton;
-    TextView _signupLink;
+    Button _signupButton;
+    TextView _forgotpasswordLink;
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,7 +44,9 @@ public class LoginActivity extends AppCompatActivity {
         _emailText = (EditText) findViewById(R.id.input_email);
         _passwordText = (EditText) findViewById(R.id.input_password);
         _loginButton = (Button) findViewById(R.id.btn_login);
-        _signupLink = (TextView) findViewById(R.id.link_signup);
+        _signupButton=(Button) findViewById(R.id.button2);
+        _forgotpasswordLink=(TextView) findViewById(R.id.textView);
+         mAuth=FirebaseAuth.getInstance();
 
         _loginButton.setOnClickListener(new View.OnClickListener() {
 
@@ -42,21 +55,61 @@ public class LoginActivity extends AppCompatActivity {
                 login();
             }
         });
-
-        _signupLink.setOnClickListener(new View.OnClickListener() {
+        _signupButton.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View v) {
+                Intent i=new Intent(LoginActivity.this,UserProfileActivity.class);
+                startActivity(i);
+
+            }
+        });
+
                 // Start the Signup activity
                 //   Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
                 //   startActivityForResult(intent, REQUEST_SIGNUP);
                 //   finish();
                 //   overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+
+        _forgotpasswordLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
+        mAuthListener= new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user=firebaseAuth.getCurrentUser();
+
+                if(user!=null)
+                {
+                    Toast toast =Toast.makeText(getBaseContext(),"Welcome",Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.CENTER_HORIZONTAL,0,0);
+                    toast.show();
+                }
+                else
+                {
+                    Toast toast =Toast.makeText(getBaseContext(),"User signed out",Toast.LENGTH_LONG);
+                    toast.show();
+                }
+
+            }
+        };
     }
 
-
+     public void onStart()
+     {
+         super.onStart();
+         mAuth.addAuthStateListener(mAuthListener);
+     }
+     public void onStop()
+     {
+         super.onStop();
+         if(mAuthListener!=null){
+             mAuth.removeAuthStateListener(mAuthListener);
+         }
+     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -80,6 +133,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void login() {
+
         Log.d(TAG, "Login");
 
         if (!validate()) {
@@ -95,10 +149,34 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog.setMessage("Authenticating...");
         progressDialog.show();
 
-        String email = _emailText.getText().toString();
-        String password = _passwordText.getText().toString();
+        String email = _emailText.getText().toString().trim();
+        String password = _passwordText.getText().toString().trim();
 
         // TODO: Implement your own authentication logic here.
+        mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+
+                if(!task.isSuccessful()){
+                    Toast toast=Toast.makeText(getBaseContext(),"Sign in failed",Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.CENTER_HORIZONTAL,0,0);
+                    toast.show();
+
+                }
+
+                else
+                {
+
+                    Toast toast=Toast.makeText(getBaseContext(),"Successfully signedin",Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.CENTER_HORIZONTAL,0,0);
+                    toast.show();
+                    Intent i=new Intent(LoginActivity.this,MainActivity.class);
+                    startActivity(i);
+                }
+
+            }
+        });
+
 
         new android.os.Handler().postDelayed(
                 new Runnable() {

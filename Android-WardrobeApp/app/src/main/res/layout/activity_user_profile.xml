@@ -12,6 +12,8 @@
 
     <TextView
         android:text="User Profile"
+        android:textAlignment="center"
+        android:textSize="30dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -20,7 +22,7 @@
         android:id="@+id/up_title" />
 
     <TextView
-        android:text="Name:"
+        android:text="@string/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/up_title"
@@ -40,7 +42,7 @@
         android:layout_marginStart="13dp" />
 
     <TextView
-        android:text="Gender:"
+        android:text="@string/gender"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/up_et_name"
@@ -49,26 +51,26 @@
         android:id="@+id/up_gender" />
 
     <RadioButton
-        android:text="Female"
+        android:text="@string/female"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/up_gender_fm"
-        android:layout_alignBaseline="@+id/up_gender_m"
-        android:layout_alignBottom="@+id/up_gender_m"
-        android:layout_alignEnd="@+id/up_et_name" />
+        android:layout_alignStart="@+id/up_et_name"
+        android:layout_marginStart="42dp"
+        android:layout_alignTop="@+id/up_gender_m" />
 
     <RadioButton
-        android:text="Male"
+        android:text="@string/male"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/up_gender_m"
         android:layout_alignBaseline="@+id/up_gender"
         android:layout_alignBottom="@+id/up_gender"
-        android:layout_toEndOf="@+id/up_title"
-        android:layout_marginStart="10dp" />
+        android:layout_marginStart="10dp"
+        android:layout_alignEnd="@+id/up_et_name" />
 
     <TextView
-        android:text="Height: "
+        android:text="@string/height"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="23dp"
@@ -87,7 +89,7 @@
         android:id="@+id/up_et_height" />
 
     <TextView
-        android:text="Weight: "
+        android:text="@string/weight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/up_et_height"
