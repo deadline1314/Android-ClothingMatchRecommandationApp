@@ -1,11 +1,12 @@
 package edu.northeastern.wardrobeapp.android_wardrobeapp;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
-import android.support.v7.app.AppCompatActivity;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.content.Intent;
 
 public class ClothingDetailedViewActivity extends AppCompatActivity {
 
@@ -20,7 +21,8 @@ public class ClothingDetailedViewActivity extends AppCompatActivity {
         imageView = (ImageView) findViewById(R.id.imageViewSmall);
         save = (Button) findViewById(R.id.saveDetails);
         Intent showIntent = getIntent();
-        Bitmap bitmap = (Bitmap) showIntent.getParcelableExtra("bitmap");
+        byte[] bis = showIntent.getByteArrayExtra("bitmap");
+        Bitmap bitmap = BitmapFactory.decodeByteArray(bis, 0, bis.length);
         imageView.setImageBitmap(bitmap);
 
     }

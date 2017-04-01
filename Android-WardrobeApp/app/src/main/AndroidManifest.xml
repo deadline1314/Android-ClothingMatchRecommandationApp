@@ -10,7 +10,6 @@
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -33,7 +32,6 @@
         </activity>
 
         <activity android:name=".ClothingDetailedViewActivity" />
-
         <activity android:name=".AddClothingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -41,7 +39,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".SignupActivity" />
         <activity android:name=".UserProfileActivity"></activity>
     </application>

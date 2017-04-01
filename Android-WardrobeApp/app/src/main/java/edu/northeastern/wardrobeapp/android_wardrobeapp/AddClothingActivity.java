@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
@@ -29,6 +30,7 @@ public class AddClothingActivity extends AppCompatActivity implements View.OnCli
     private Button fromCamera, fromGallery, addDetails;
 
     @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_clothing);
@@ -72,7 +74,10 @@ public class AddClothingActivity extends AppCompatActivity implements View.OnCli
     private void addClothingDetail() {
         Intent intent = new Intent();
         intent.setClass(this, ClothingDetailedViewActivity.class);
-        intent.putExtra("bitmap", bitmap);
+        ByteArrayOutputStream baos=new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte [] bitmapByte =baos.toByteArray();
+        intent.putExtra("bitmap", bitmapByte);
         startActivity(intent);
     }
 
