@@ -16,10 +16,12 @@
         completions."
     </string>
     <string name="already_a_member_log_in_here">Already a Member? Log in here.</string>
+    <string name="link_no_account_sign_up">No account yet? <u>Create one now</u>.</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="email">Email</string>
     <string name="signup_email">Email</string>
     <string name="signup_password">Password</string>
+    <string name="label_sign_in">Sign In</string>
     <string name="sign_up">Sign Up</string>
     <!-- Menu-related strings -->
     <string name="menu_sign_out">Sign Out</string>
