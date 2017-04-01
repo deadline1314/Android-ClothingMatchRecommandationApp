@@ -40,9 +40,6 @@ public class LoginActivity extends BaseActivity {
         btnLogin = (Button) findViewById(R.id.btn_login);
         btnSignUp = (Button) findViewById(R.id.btn_sign_up);
         linkForgotPassword = (TextView) findViewById(R.id.link_forgot_pass);
-        Class context = this.getClass();
-        String name = context.getSimpleName();
-        Log.d(name, "Logged out " + name);
     }
 
     public void Login(View view) {
