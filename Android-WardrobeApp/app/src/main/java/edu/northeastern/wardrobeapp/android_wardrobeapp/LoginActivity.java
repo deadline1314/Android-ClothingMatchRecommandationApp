@@ -124,8 +124,7 @@ public class LoginActivity extends BaseActivity {
 
     private void showProgressDialog() {
         // Progress
-        progressDialog = new ProgressDialog(LoginActivity.this,
-                R.style.AppTheme_Dark_Dialog);
+        progressDialog = new ProgressDialog(LoginActivity.this);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Authenticating...");
         progressDialog.show();
