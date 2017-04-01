@@ -75,7 +75,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     public void SignUp(View view) {
-        Intent i = new Intent(LoginActivity.this,UserProfileActivity.class);
+        Intent i = new Intent(LoginActivity.this, SignupActivity.class);
         startActivity(i);
     }
 
