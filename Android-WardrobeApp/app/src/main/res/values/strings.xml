@@ -22,7 +22,7 @@
     <string name="signup_email">Email</string>
     <string name="signup_password">Password</string>
     <string name="label_sign_in">Sign In</string>
-    <string name="sign_up">Sign Up</string>
+    <string name="label_sign_up">Sign Up</string>
     <!-- Menu-related strings -->
     <string name="menu_sign_out">Sign Out</string>
     <string name="email1">Email</string>
@@ -30,6 +30,7 @@
     <string name="log_in">Log in</string>
     <string name="sign_up1">Sign up</string>
     <string name="forgot_password">Forgot password?</string>
+    <!-- Sign-Up Profile -->
     <string name="name">Name:</string>
     <string name="gender">Gender:</string>
     <string name="female">Female</string>
