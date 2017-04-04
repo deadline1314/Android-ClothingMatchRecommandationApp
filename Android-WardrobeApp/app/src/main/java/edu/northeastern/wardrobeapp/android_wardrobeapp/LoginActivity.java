@@ -4,8 +4,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,185 +19,61 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseActivity {
 
-    //private Button btnLogin;
-    //private EditText editTextEmail;
-    //private EditText editTextPassword;
+    // NOTE: mAuth is defined in BaseActivity
     private static final String TAG = "LoginActivity";
-    private static final int REQUEST_SIGNUP = 0;
-    EditText _emailText;
-    EditText _passwordText;
-    Button _loginButton;
-    Button _signupButton;
-    TextView _forgotpasswordLink;
-    private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthListener;
+    EditText editTxtEmail;
+    EditText editTxtPassword;
+    Button btnLogin;
+    Button btnSignUp;
+    TextView linkForgotPassword;
+    ProgressDialog progressDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        _emailText = (EditText) findViewById(R.id.input_email);
-        _passwordText = (EditText) findViewById(R.id.input_password);
-        _loginButton = (Button) findViewById(R.id.btn_login);
-        _signupButton=(Button) findViewById(R.id.button2);
-        _forgotpasswordLink=(TextView) findViewById(R.id.textView);
-         mAuth=FirebaseAuth.getInstance();
-
-        _loginButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                login();
-            }
-        });
-        _signupButton.setOnClickListener(new View.OnClickListener(){
-
-            @Override
-            public void onClick(View v) {
-                Intent i=new Intent(LoginActivity.this,UserProfileActivity.class);
-                startActivity(i);
-
-            }
-        });
-
-                // Start the Signup activity
-                //   Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
-                //   startActivityForResult(intent, REQUEST_SIGNUP);
-                //   finish();
-                //   overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-
-        _forgotpasswordLink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-        mAuthListener= new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user=firebaseAuth.getCurrentUser();
-
-                if(user!=null)
-                {
-                    Toast toast =Toast.makeText(getBaseContext(),"Welcome",Toast.LENGTH_LONG);
-                    toast.setGravity(Gravity.CENTER_HORIZONTAL,0,0);
-                    toast.show();
-                }
-                else
-                {
-                    Toast toast =Toast.makeText(getBaseContext(),"User signed out",Toast.LENGTH_LONG);
-                    toast.show();
-                }
-
-            }
-        };
+        editTxtEmail = (EditText) findViewById(R.id.input_email);
+        editTxtPassword = (EditText) findViewById(R.id.input_password);
+        btnLogin = (Button) findViewById(R.id.btn_login);
+        btnSignUp = (Button) findViewById(R.id.btn_sign_up);
+        linkForgotPassword = (TextView) findViewById(R.id.link_forgot_pass);
     }
 
-     public void onStart()
-     {
-         super.onStart();
-         mAuth.addAuthStateListener(mAuthListener);
-     }
-     public void onStop()
-     {
-         super.onStop();
-         if(mAuthListener!=null){
-             mAuth.removeAuthStateListener(mAuthListener);
-         }
-     }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    public void login() {
-
-        Log.d(TAG, "Login");
-
+    public void Login(View view) {
         if (!validate()) {
             onLoginFailed();
             return;
         }
 
-        _loginButton.setEnabled(false);
+        // Block button
+        btnLogin.setEnabled(false);
+        showProgressDialog();
 
-        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
-                R.style.AppTheme_Dark_Dialog);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Authenticating...");
-        progressDialog.show();
+        String email = editTxtEmail.getText().toString().trim();
+        String password = editTxtPassword.getText().toString().trim();
 
-        String email = _emailText.getText().toString().trim();
-        String password = _passwordText.getText().toString().trim();
-
-        // TODO: Implement your own authentication logic here.
+        // Login with Firebase
         mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
 
-                if(!task.isSuccessful()){
-                    Toast toast=Toast.makeText(getBaseContext(),"Sign in failed",Toast.LENGTH_LONG);
-                    toast.setGravity(Gravity.CENTER_HORIZONTAL,0,0);
-                    toast.show();
-
-                }
-
-                else
-                {
-
-                    Toast toast=Toast.makeText(getBaseContext(),"Successfully signedin",Toast.LENGTH_LONG);
-                    toast.setGravity(Gravity.CENTER_HORIZONTAL,0,0);
-                    toast.show();
-                    Intent i=new Intent(LoginActivity.this,MainActivity.class);
-                    startActivity(i);
+                if (!task.isSuccessful()) {
+                    onLoginFailed();
+                    progressDialog.dismiss();
+                } else {
+                    onLoginSuccess();
                 }
 
             }
         });
-
-
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        // On complete call either onLoginSuccess or onLoginFailed
-                        onLoginSuccess();
-                        // onLoginFailed();
-                        progressDialog.dismiss();
-                    }
-                }, 3000);
     }
 
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_SIGNUP) {
-            if (resultCode == RESULT_OK) {
-
-                // TODO: Implement successful signup logic here
-                // By default we just finish the Activity and log them in automatically
-                this.finish();
-            }
-        }
+    public void SignUp(View view) {
+        Intent i = new Intent(LoginActivity.this, SignupActivity.class);
+        startActivity(i);
     }
 
     @Override
@@ -209,38 +83,48 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onLoginSuccess() {
-        _loginButton.setEnabled(true);
-        finish();
+        // Ken: No need for Toast here, we can show a "Welcome" on the MainActivity instead
+        Intent i = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(i);
     }
 
     public void onLoginFailed() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
+        Toast toast = Toast.makeText(getBaseContext(),"Sign in failed",Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER_HORIZONTAL,0,0);
+        toast.show();
 
-        _loginButton.setEnabled(true);
+        btnLogin.setEnabled(true);
     }
 
     public boolean validate() {
         boolean valid = true;
 
-        String email = _emailText.getText().toString();
-        String password = _passwordText.getText().toString();
+        String email = editTxtEmail.getText().toString();
+        String password = editTxtPassword.getText().toString();
 
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            _emailText.setError("enter a valid email address");
+            editTxtEmail.setError("Enter a valid email address");
             valid = false;
         } else {
-            _emailText.setError(null);
+            editTxtEmail.setError(null);
         }
 
-        if (password.isEmpty() || password.length() < 4 || password.length() > 10) {
-            _passwordText.setError("between 4 and 10 alphanumeric characters");
+        if (password.isEmpty() || password.length() < 6) {
+            editTxtPassword.setError("Must be at least 6 characters");
             valid = false;
         } else {
-            _passwordText.setError(null);
+            editTxtPassword.setError(null);
         }
 
         return valid;
     }
 
+    private void showProgressDialog() {
+        // Progress
+        progressDialog = new ProgressDialog(LoginActivity.this);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Authenticating...");
+        progressDialog.show();
+    }
 }
 

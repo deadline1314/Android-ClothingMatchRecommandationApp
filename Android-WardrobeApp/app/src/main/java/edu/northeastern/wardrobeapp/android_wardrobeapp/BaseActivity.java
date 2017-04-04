@@ -1,17 +1,17 @@
 package edu.northeastern.wardrobeapp.android_wardrobeapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 /**
  * Extend from this class to access all menu/Firebase logic
@@ -22,9 +22,8 @@ public class BaseActivity extends AppCompatActivity {
     // Firebase variables
     protected FirebaseAuth mAuth;
     protected FirebaseAuth.AuthStateListener mAuthListener;
-    private StorageReference mStorageRef;
-    // User-related variables
-    protected String userId;
+    // Ken: Access Firebase methods through this variable
+    protected DataAccess DA;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -32,24 +31,26 @@ public class BaseActivity extends AppCompatActivity {
 
         // Auth
         mAuth = FirebaseAuth.getInstance();
+        DA = new DataAccess();
+        final Context mContext = this;
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if (firebaseAuth.getCurrentUser() != null) {
-                    userId = firebaseAuth.getCurrentUser().getUid();
+                    DA.setUserId(firebaseAuth.getCurrentUser().getUid());
                 } else {
-                    // Ken: When no user is detected, ask for login
-                    //startActivity(new Intent(BaseActivity.this, LoginActivity.class));
+                    String currentActivity = mContext.getClass().getSimpleName();
+                    if (!currentActivity.equals("LoginActivity")) {
+                        // Ken: When no user is detected, ask for login
+                        startActivity(new Intent(mContext, LoginActivity.class));
+                    }
                 }
             }
         };
-        // Storage
-        mStorageRef = FirebaseStorage.getInstance().getReference();
     }
 
-    // Firebase functions
-    public boolean isUserLoggedIn() {
-        return userId != null;
+    public String getCurrentUserId() {
+        return DA.getUserId();
     }
 
     @Override

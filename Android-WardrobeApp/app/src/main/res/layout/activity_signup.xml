@@ -51,7 +51,7 @@
         tools:ignore="LabelFor" />
 
     <Button
-        android:text="@string/sign_up"
+        android:text="@string/label_sign_up"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/signup_btn"

@@ -10,4 +10,10 @@ public class SignupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
     }
+
+    /*
+     * Note from Ken:
+     * On Submit/Next, just pass the password and email to
+     * UserProfileActivity in a bundle
+     */
 }
