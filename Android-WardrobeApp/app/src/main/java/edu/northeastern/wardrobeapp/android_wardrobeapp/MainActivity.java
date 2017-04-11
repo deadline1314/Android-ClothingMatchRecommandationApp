@@ -1,5 +1,6 @@
 package edu.northeastern.wardrobeapp.android_wardrobeapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -8,6 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.Toast;
 
 public class MainActivity extends BaseActivity {
@@ -46,6 +48,10 @@ public class MainActivity extends BaseActivity {
 
         // Welcome message
         Toast.makeText(this, "Welcome!", Toast.LENGTH_SHORT).show();
+    }
+
+    public void AddClothing(View view) {
+        startActivity(new Intent(this, AddClothingActivity.class));
     }
 
 

@@ -1,30 +1,40 @@
 package edu.northeastern.wardrobeapp.android_wardrobeapp;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
-import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 
-public class AddClothingActivity extends AppCompatActivity implements View.OnClickListener {
+public class AddClothingActivity extends BaseActivity implements View.OnClickListener {
 
     private final int PICK_IMAGE = 12345;
     private final int TAKE_PICTURE = 6352;
     private static final int REQUEST_CAMERA_ACCESS_PERMISSION = 5674;
     private Bitmap bitmap;
+    private String imageName = null;
 
     private ImageView imageView;
     private Button fromCamera, fromGallery, addDetails;
@@ -45,7 +55,6 @@ public class AddClothingActivity extends AppCompatActivity implements View.OnCli
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
             fromCamera.setVisibility(View.GONE);
         }
-
     }
 
     @Override
@@ -65,19 +74,21 @@ public class AddClothingActivity extends AppCompatActivity implements View.OnCli
                 getImageFromGallery();
                 break;
             case R.id.addDetails:
-                if (bitmap != null)
+                if (bitmap != null) {
                     addClothingDetail();
+                } else {
+                    Toast.makeText(this, "Choose or capture a photo!", Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
     }
 
     private void addClothingDetail() {
-        Intent intent = new Intent();
-        intent.setClass(this, ClothingDetailedViewActivity.class);
-        ByteArrayOutputStream baos=new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-        byte [] bitmapByte =baos.toByteArray();
-        intent.putExtra("bitmap", bitmapByte);
+        Intent intent = new Intent(this, ClothingDetailedViewActivity.class);
+        // Note: Just pass in the file name because it's stored internally
+        Bundle b = new Bundle();
+        b.putString("filename", imageName);
+        intent.putExtras(b);
         startActivity(intent);
     }
 
@@ -103,9 +114,11 @@ public class AddClothingActivity extends AppCompatActivity implements View.OnCli
         if (requestCode == PICK_IMAGE) {
             if (resultCode == Activity.RESULT_OK) {
                 try {
-                    InputStream inputStream = getContentResolver().openInputStream(data.getData());
+                    Uri uri = data.getData();
+                    InputStream inputStream = getContentResolver().openInputStream(uri);
                     bitmap = BitmapFactory.decodeStream(inputStream);
                     imageView.setImageBitmap(bitmap);
+                    createImageFile();
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -116,6 +129,7 @@ public class AddClothingActivity extends AppCompatActivity implements View.OnCli
                 Bundle extras = data.getExtras();
                 bitmap = (Bitmap) extras.get("data");
                 imageView.setImageBitmap(bitmap);
+                createImageFile();
             }
         }
     }
@@ -130,6 +144,22 @@ public class AddClothingActivity extends AppCompatActivity implements View.OnCli
                 break;
             default:
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+    private void createImageFile() {
+        // Create an image file name
+        // TODO: Progressbar?
+        String filename = "bitmap.png";
+        try {
+            FileOutputStream stream = this.openFileOutput(filename, Context.MODE_PRIVATE);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            imageName = filename;
+
+            //Cleanup
+            stream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
