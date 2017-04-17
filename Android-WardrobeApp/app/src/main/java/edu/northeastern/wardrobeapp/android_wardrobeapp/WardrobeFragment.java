@@ -6,7 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+
 public class WardrobeFragment extends Fragment {
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -19,4 +21,6 @@ public class WardrobeFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_wardrobe, container, false);
         return rootView;
     }
+
+
 }
