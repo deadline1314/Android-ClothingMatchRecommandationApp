@@ -1,14 +1,17 @@
 package edu.northeastern.wardrobeapp.android_wardrobeapp;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.app.ProgressDialog;
-import android.util.Log;
 import android.content.Intent;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,7 +22,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends BaseActivity{
 
     // NOTE: mAuth is defined in BaseActivity
     private static final String TAG = "LoginActivity";
@@ -40,41 +43,125 @@ public class LoginActivity extends BaseActivity {
         btnLogin = (Button) findViewById(R.id.btn_login);
         btnSignUp = (Button) findViewById(R.id.btn_sign_up);
         linkForgotPassword = (TextView) findViewById(R.id.link_forgot_pass);
+
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(validate())
+                    Login();
+            }
+        });
+
+        btnSignUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i=new Intent(getApplicationContext(), SignupActivity.class);
+                startActivity(i);
+
+            }
+        });
+        linkForgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                forgotPswd();
+
     }
 
-    public void Login(View view) {
-        if (!validate()) {
-            onLoginFailed();
-            return;
-        }
+    private void forgotPswd()
+    {
+        final AlertDialog.Builder forgotPswd=new AlertDialog.Builder(LoginActivity.this);
+        forgotPswd.setTitle("Forgot password");
+        forgotPswd.setMessage("Enter your mail address below:");
+        final EditText email=new EditText(getApplicationContext());
+        email.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+        forgotPswd.setView(email);
+        forgotPswd.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String thisEmail= email.getText().toString();
+                passwordReset(thisEmail);
+                dialog.dismiss();
+            }
+        });
+        AlertDialog fdialog=forgotPswd.create();
+        fdialog.show();
+    }
+        });
+    }
+    private void passwordReset(String thisEmail) {
+        mAuth.sendPasswordResetEmail(thisEmail)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(getApplicationContext(),"Password rest mail sent successfully",Toast.LENGTH_SHORT).show();
+                        }
+                        else
+                        {
+                            Toast.makeText(getApplicationContext(),"Error: "+task.getException().getMessage(),Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+    }
 
+    public void Login() {
         // Block button
         btnLogin.setEnabled(false);
         showProgressDialog();
 
         String email = editTxtEmail.getText().toString().trim();
-        String password = editTxtPassword.getText().toString().trim();
+        String password = editTxtPassword.getText().toString();
 
         // Login with Firebase
         mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
+                progressDialog.dismiss();
+                    if (!task.isSuccessful()) {
+                        Toast toast = Toast.makeText(getBaseContext(),task.getException().getMessage(),Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.CENTER_HORIZONTAL,0,0);
+                        toast.show();
+                        btnLogin.setEnabled(true);
 
-                if (!task.isSuccessful()) {
-                    onLoginFailed();
-                    progressDialog.dismiss();
-                } else {
-                    onLoginSuccess();
-                }
-
+                    } else {
+                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                        if(!user.isEmailVerified()) {
+                            setErrorDialog();
+                                                     }
+                        else
+                            onLoginSuccess();
+                        }
             }
         });
     }
 
-    public void SignUp(View view) {
-        Intent i = new Intent(LoginActivity.this, SignupActivity.class);
-        startActivity(i);
+    private void setErrorDialog() {
+        btnLogin.setEnabled(true);
+        editTxtPassword.setText("");
+        final AlertDialog.Builder emailVerification=new AlertDialog.Builder(LoginActivity.this);
+        emailVerification.setTitle("Verify your E-mail address");
+        emailVerification.setMessage("Your E-mail address is yet to be verified. Check the inbox of the registered E-mail address or click resend below.");
+
+        emailVerification.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+              dialog.dismiss();
+            }
+        });
+
+        emailVerification.setNeutralButton("Resend", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+               new VerificationMail(getApplicationContext()).sendVerificationMail();
+            }
+        });
+        AlertDialog edialog=emailVerification.create();
+        edialog.show();
     }
+
+ //  public void signup() {
+       //startActivity(new Intent(LoginActivity.this, SignupActivity.class));}
 
     @Override
     public void onBackPressed() {
@@ -88,13 +175,6 @@ public class LoginActivity extends BaseActivity {
         startActivity(i);
     }
 
-    public void onLoginFailed() {
-        Toast toast = Toast.makeText(getBaseContext(),"Sign in failed",Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.CENTER_HORIZONTAL,0,0);
-        toast.show();
-
-        btnLogin.setEnabled(true);
-    }
 
     public boolean validate() {
         boolean valid = true;
@@ -126,5 +206,6 @@ public class LoginActivity extends BaseActivity {
         progressDialog.setMessage("Authenticating...");
         progressDialog.show();
     }
+
 }
 

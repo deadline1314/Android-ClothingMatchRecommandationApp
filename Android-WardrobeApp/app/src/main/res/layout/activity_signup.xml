@@ -1,90 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_signup"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="edu.northeastern.wardrobeapp.android_wardrobeapp.SignupActivity">
+    tools:context="edu.northeastern.wardrobeapp.android_wardrobeapp.SignupActivity"
+    android:orientation="vertical"
+    android:weightSum="1">
 
-    <TextView
-        android:text="@string/email"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/signup_tv_email"
-        android:layout_marginBottom="86dp"
-        android:layout_above="@+id/signup_et_pw"
-        android:layout_alignParentStart="true" />
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="162dp"
+        android:src="@drawable/signuplogo" />
 
-    <TextView
-        android:text="@string/signup_password"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/signup_tv_password"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="220dp" />
 
-    <EditText
-        android:layout_width="wrap_content"
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <android.support.design.widget.TextInputEditText
+        android:id="@+id/nameET"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textPassword"
+        android:layout_weight="0.09"
+        android:hint="@string/names"
+        android:inputType="textPersonName" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <android.support.design.widget.TextInputEditText
+        android:id="@+id/emailET"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.08"
         android:ems="10"
-        android:id="@+id/signup_et_pw"
-        android:layout_marginTop="13dp"
-        android:layout_below="@+id/signup_tv_password"
-        android:layout_alignParentStart="true"
-        tools:ignore="LabelFor" />
+        android:hint="@string/e_mails"
+        android:inputType="textEmailAddress" />
+    </android.support.design.widget.TextInputLayout>
 
-    <EditText
-        android:layout_width="wrap_content"
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <android.support.design.widget.TextInputEditText
+        android:id="@+id/pswdET"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textPassword"
+        android:layout_weight="0.06"
         android:ems="10"
-        android:layout_marginTop="12dp"
-        android:id="@+id/signup_et_confirmpw"
-        android:layout_below="@+id/signup_tv_confirmpw"
-        android:layout_alignParentStart="true"
-        tools:ignore="LabelFor" />
+        android:hint="@string/passwords"
+        android:inputType="textPassword" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <android.support.design.widget.TextInputEditText
+        android:id="@+id/confirmET"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.09"
+        android:ems="10"
+        android:hint="@string/confirm_passwords"
+        android:inputType="textPassword" />
+    </android.support.design.widget.TextInputLayout>
+
+
+        <Spinner
+            android:id="@+id/gender"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dropdown"
+            style="@style/Widget.AppCompat.Spinner.Underlined"
+            android:textColor="#808080" />
 
     <Button
-        android:text="@string/label_sign_up"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/signup_btn"
-        android:layout_marginTop="11dp"
-        android:layout_below="@+id/signup_et_confirmpw"
-        android:layout_alignEnd="@+id/signup_et_confirmpw" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textEmailAddress"
-        android:ems="10"
-        android:id="@+id/signup_et_email"
-        android:text="@string/signup_email"
-        android:layout_marginTop="25dp"
-        android:layout_alignTop="@+id/signup_tv_email"
-        android:layout_alignParentStart="true"
-        tools:ignore="LabelFor" />
-
-    <TextView
-        android:text="@string/already_a_member_log_in_here"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/signup_alreadyMember"
-        android:layout_below="@+id/signup_btn"
-        android:layout_centerHorizontal="true" />
-
-    <TextView
-        android:text="@string/confirm_password"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="21dp"
-        android:id="@+id/signup_tv_confirmpw"
-        android:layout_below="@+id/signup_et_pw"
-        android:layout_alignParentStart="true" />
-</RelativeLayout>
+        android:id="@+id/signupBTN"
+        android:layout_width="match_parent"
+        android:layout_height="37dp"
+        android:layout_weight="0.12"
+        android:text="Sign up" />
+</LinearLayout>

@@ -37,4 +37,14 @@
     <string name="male">Male</string>
     <string name="height">Height:</string>
     <string name="weight">Weight:</string>
+    <string name="ok">OK</string>
+    <string name="name1">Name*</string>
+    <string name="e_mail1">E-mail*</string>
+    <string name="password1">Password*</string>
+    <string name="confirm_password1">Confirm password*</string>
+    <string name="gender2">Gender</string>
+    <string name="names">Name*</string>
+    <string name="e_mails">E-mail*</string>
+    <string name="passwords">Password*</string>
+    <string name="confirm_passwords">Confirm password*</string>
 </resources>
