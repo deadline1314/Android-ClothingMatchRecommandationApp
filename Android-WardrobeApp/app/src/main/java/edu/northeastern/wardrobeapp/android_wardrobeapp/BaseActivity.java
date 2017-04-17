@@ -22,6 +22,7 @@ public class BaseActivity extends AppCompatActivity {
     // Firebase variables
     protected FirebaseAuth mAuth;
     protected FirebaseAuth.AuthStateListener mAuthListener;
+    private String userId;
     // Ken: Access Firebase methods through this variable
     protected DataAccess DA;
 
@@ -37,9 +38,11 @@ public class BaseActivity extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if (firebaseAuth.getCurrentUser() != null) {
-                    DA.setUserId(firebaseAuth.getCurrentUser().getUid());
+                    setUserId(firebaseAuth.getCurrentUser().getUid());
+                    Log.d(mContext.getClass().getSimpleName(), "User ID found: " + firebaseAuth.getCurrentUser().getUid());
                 } else {
                     String currentActivity = mContext.getClass().getSimpleName();
+                    Log.d(currentActivity, "Should log in");
                     if (!currentActivity.equals("LoginActivity")) {
                         // Ken: When no user is detected, ask for login
                         startActivity(new Intent(mContext, LoginActivity.class));
@@ -49,8 +52,12 @@ public class BaseActivity extends AppCompatActivity {
         };
     }
 
+    private void setUserId(String id) {
+        this.userId = id;
+    }
+
     public String getCurrentUserId() {
-        return DA.getUserId();
+        return mAuth.getCurrentUser().getUid();
     }
 
     @Override
