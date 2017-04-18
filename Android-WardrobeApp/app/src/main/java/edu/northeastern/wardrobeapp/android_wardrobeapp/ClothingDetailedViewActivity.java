@@ -19,6 +19,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.HashMap;
 
 public class ClothingDetailedViewActivity extends BaseActivity {
 
@@ -61,6 +62,7 @@ public class ClothingDetailedViewActivity extends BaseActivity {
      */
     public void SaveClothing(View view) {
         final Context context = this;
+        final DataAccess DA = new DataAccess();
         // TODO: Progressbar?
         btnSave.setEnabled(false);
         OnSuccessListener<UploadTask.TaskSnapshot> onSuccess = new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -68,8 +70,15 @@ public class ClothingDetailedViewActivity extends BaseActivity {
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 @SuppressWarnings("VisibleForTests")
                 Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                Log.d("DetaileView", "Got download URL: " + downloadUrl.toString());
-                Toast.makeText(context, "Upload success!", Toast.LENGTH_SHORT).show();
+                // Save clothing data
+                HashMap<String, String> clothingData = new HashMap<>();
+                // TODO: Add all field values here
+                clothingData.put("url", downloadUrl.toString());
+                DA.saveClothingData(getCurrentUserId(), clothingData);
+                // Go back to main with a toast request
+                Intent i = new Intent(context, MainActivity.class);
+                i.putExtra("toast", "Upload success!");
+                startActivity(i);
             }
         };
         OnFailureListener onFailure = new OnFailureListener() {
@@ -80,7 +89,6 @@ public class ClothingDetailedViewActivity extends BaseActivity {
                 btnSave.setEnabled(true);
             }
         };
-        DataAccess DA = new DataAccess();
         DA.saveToStorage("clothing_test", getCurrentUserId() , imageFile, onSuccess, onFailure);
     }
 }

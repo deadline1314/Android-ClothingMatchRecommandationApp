@@ -1,50 +1,48 @@
 package edu.northeastern.wardrobeapp.android_wardrobeapp;
 
-
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.widget.Toast;
-
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.concurrent.Callable;
+import java.util.Map;
 
 public class DataAccess {
     // Firebase variables
     private StorageReference storageRef;
+    private DatabaseReference dbRef;
 
     public DataAccess() {
         storageRef = FirebaseStorage.getInstance().getReference();
+        dbRef = FirebaseDatabase.getInstance().getReference();
     }
 
-    // Firebase AUTH Functions.............
-
-    // Firebase STORAGE Functions...........
-
     // tODO: function to store detail data then upload file
-//    public String saveClothingData(String fileName, Bitmap image) {
-//
-//        OnSuccessListener successListener = new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//            @Override
-//            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                @SuppressWarnings("VisibleForTests")
-//                Uri downloadUrl = taskSnapshot.getDownloadUrl();
-//            }
-//        }
-//        this.saveToStorage(fileName, image);
-//    }
+    public void saveClothingData(String userId, Map<String, String> clothingData) {
+        // Set ID if new
+        if (!clothingData.containsKey("id")) {
+            clothingData.put("id", "clothing_" + getTimeStamp());
+        }
+        // Store data in Firebase
+        DatabaseReference clothingRef = dbRef.child("userdata").child(userId).child("wardrobe").child(clothingData.get("id"));
+        for (Map.Entry<String, String> item : clothingData.entrySet()) {
+            String key = item.getKey();
+            String value = item.getValue();
+            if (key.equals("id")) {
+                continue;
+            }
+            clothingRef.child(key).setValue(value);
+        }
+    }
 
     /**
      * Saves off an image bitmap to firebase. Needs an onSuccess and onFailure handler.
@@ -75,7 +73,10 @@ public class DataAccess {
      * @return String
      */
     public String getFileNameSuffix() {
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        return "_" + timeStamp + ".png";
+        return "_" + getTimeStamp() + ".png";
+    }
+
+    private String getTimeStamp() {
+        return new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
     }
 }
