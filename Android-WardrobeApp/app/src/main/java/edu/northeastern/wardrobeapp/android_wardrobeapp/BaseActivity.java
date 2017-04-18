@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -50,6 +51,12 @@ public class BaseActivity extends AppCompatActivity {
                 }
             }
         };
+
+        // Get any toast requests
+        String toastReq = getIntent().getStringExtra("toast");
+        if (toastReq != null) {
+            Toast.makeText(this, toastReq, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void setUserId(String id) {
