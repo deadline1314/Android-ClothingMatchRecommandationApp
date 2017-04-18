@@ -53,6 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             android:layout_marginTop="24dp"
+            android:onClick="Login"
             android:padding="12dp"
             android:text="@string/label_sign_in" />
 
@@ -63,7 +64,7 @@
             android:layout_height="wrap_content"
             android:enabled="true"
             android:text="@string/label_sign_up"
-            android:visibility="visible" />
+            android:onClick="SignUp"/>
 
         <TextView
             android:id="@+id/link_forgot_pass"

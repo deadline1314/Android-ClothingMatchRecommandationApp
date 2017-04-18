@@ -104,22 +104,19 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
        thisPswd=pswd.getText().toString();
        thisConfirm=confirm.getText().toString();
        if(validateInput()) {
-
             mAuth.createUserWithEmailAndPassword(thisMail, thisPswd)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-
                             if (!task.isSuccessful()){
                                 Toast.makeText(getBaseContext(), "Error: "+task.getException().getMessage().toString(), Toast.LENGTH_SHORT).show();
                             } else {
                                 (new VerificationMail(getApplicationContext())).sendVerificationMail();
                                 startActivity(new Intent(SignupActivity.this, LoginActivity.class));
-                                finish();                           }
-
+                                finish();
+                            }
                         }
                     });
-
         }
     }
 

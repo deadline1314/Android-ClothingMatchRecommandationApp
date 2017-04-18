@@ -44,67 +44,55 @@ public class LoginActivity extends BaseActivity{
         btnSignUp = (Button) findViewById(R.id.btn_sign_up);
         linkForgotPassword = (TextView) findViewById(R.id.link_forgot_pass);
 
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(validate())
-                    Login();
-            }
-        });
-
-        btnSignUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i=new Intent(getApplicationContext(), SignupActivity.class);
-                startActivity(i);
-
-            }
-        });
         linkForgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 forgotPswd();
-
-    }
-
-    private void forgotPswd()
-    {
-        final AlertDialog.Builder forgotPswd=new AlertDialog.Builder(LoginActivity.this);
-        forgotPswd.setTitle("Forgot password");
-        forgotPswd.setMessage("Enter your mail address below:");
-        final EditText email=new EditText(getApplicationContext());
-        email.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
-        forgotPswd.setView(email);
-        forgotPswd.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String thisEmail= email.getText().toString();
-                passwordReset(thisEmail);
-                dialog.dismiss();
             }
-        });
-        AlertDialog fdialog=forgotPswd.create();
-        fdialog.show();
-    }
-        });
-    }
-    private void passwordReset(String thisEmail) {
-        mAuth.sendPasswordResetEmail(thisEmail)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
+
+            private void forgotPswd() {
+                final AlertDialog.Builder forgotPswd = new AlertDialog.Builder(LoginActivity.this);
+                forgotPswd.setTitle("Forgot password");
+                forgotPswd.setMessage("Enter your mail address below:");
+                final EditText email=new EditText(getApplicationContext());
+                email.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+                forgotPswd.setView(email);
+                forgotPswd.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(getApplicationContext(),"Password rest mail sent successfully",Toast.LENGTH_SHORT).show();
-                        }
-                        else
-                        {
-                            Toast.makeText(getApplicationContext(),"Error: "+task.getException().getMessage(),Toast.LENGTH_LONG).show();
-                        }
+                    public void onClick(DialogInterface dialog, int which) {
+                        String thisEmail= email.getText().toString();
+                        passwordReset(thisEmail);
+                        dialog.dismiss();
                     }
                 });
+                AlertDialog fdialog = forgotPswd.create();
+                fdialog.show();
+            }
+        });
     }
 
-    public void Login() {
+    private void passwordReset(String thisEmail) {
+        mAuth.sendPasswordResetEmail(thisEmail).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+            if (task.isSuccessful()) {
+                Toast.makeText(getApplicationContext(),"Please check your mail to complete the reset.", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(getApplicationContext(),"Error: " + task.getException().getMessage(),Toast.LENGTH_LONG).show();
+            }
+            }
+        });
+    }
+
+    public void SignUp(View v) {
+        Intent i = new Intent(getApplicationContext(), SignupActivity.class);
+        startActivity(i);
+    }
+
+    public void Login(View v) {
+        if (!validate()) {
+            return;
+        }
         // Block button
         btnLogin.setEnabled(false);
         showProgressDialog();
@@ -122,15 +110,16 @@ public class LoginActivity extends BaseActivity{
                         toast.setGravity(Gravity.CENTER_HORIZONTAL,0,0);
                         toast.show();
                         btnLogin.setEnabled(true);
-
                     } else {
-                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                        if(!user.isEmailVerified()) {
-                            setErrorDialog();
-                                                     }
-                        else
-                            onLoginSuccess();
-                        }
+                        onLoginSuccess();
+//                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+//                        if(!user.isEmailVerified()) {
+//                            setErrorDialog();
+//                        }
+//                        else
+//                            onLoginSuccess();
+//                        }
+                    }
             }
         });
     }
@@ -159,9 +148,6 @@ public class LoginActivity extends BaseActivity{
         AlertDialog edialog=emailVerification.create();
         edialog.show();
     }
-
- //  public void signup() {
-       //startActivity(new Intent(LoginActivity.this, SignupActivity.class));}
 
     @Override
     public void onBackPressed() {
