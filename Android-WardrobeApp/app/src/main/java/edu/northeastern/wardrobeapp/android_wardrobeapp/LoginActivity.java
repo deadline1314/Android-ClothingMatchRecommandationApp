@@ -1,10 +1,8 @@
 package edu.northeastern.wardrobeapp.android_wardrobeapp;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.Gravity;
@@ -19,10 +17,8 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
-public class LoginActivity extends BaseActivity{
+public class LoginActivity extends BaseActivity {
 
     // NOTE: mAuth is defined in BaseActivity
     private static final String TAG = "LoginActivity";
@@ -112,6 +108,7 @@ public class LoginActivity extends BaseActivity{
                         btnLogin.setEnabled(true);
                     } else {
                         onLoginSuccess();
+                        // TODO: Re-enable
 //                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 //                        if(!user.isEmailVerified()) {
 //                            setErrorDialog();

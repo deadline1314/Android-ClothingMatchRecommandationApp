@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,22 +18,17 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SignupActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
+public class SignupActivity extends BaseActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
     Spinner spinner;
     EditText name, email, pswd, confirm;
     Button signup;
 
     String thisName,thisGender,thisMail;
     String thisPswd,thisConfirm;
-
-    private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,12 +42,12 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         //email.setHintTextColor(Color.BLACK);
 
         pswd = (EditText) findViewById(R.id.pswdET);
-       // pswd.setHintTextColor(Color.BLACK);
+        // pswd.setHintTextColor(Color.BLACK);
         pswd.setTypeface(Typeface.DEFAULT);
         pswd.setTransformationMethod(new PasswordTransformationMethod());
 
         confirm = (EditText) findViewById(R.id.confirmET);
-       // confirm.setHintTextColor(Color.BLACK);
+        // confirm.setHintTextColor(Color.BLACK);
         confirm.setTypeface(Typeface.DEFAULT);
         confirm.setTransformationMethod(new PasswordTransformationMethod());
 
@@ -73,30 +67,8 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
         signup = (Button) findViewById(R.id.signupBTN);
         signup.setOnClickListener(this);
-
-        mAuth=FirebaseAuth.getInstance();
-
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-            }
-            };
-    }
-    @Override
-    public void onStart() {
-        super.onStart();
-        mAuth.addAuthStateListener(mAuthListener);
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (mAuthListener != null) {
-            mAuth.removeAuthStateListener(mAuthListener);
-        }
-    }
     @Override
     public void onClick(View v) {
         thisName=name.getText().toString().trim();
@@ -134,11 +106,8 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
             confirm.setError("Password do not match");
             return false;
         }
-
-            return true;
+        return true;
     }
-
-
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -149,10 +118,4 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
-
-    /*
-     * Note from Ken:
-     * On Submit/Next, just pass the password and email to
-     * UserProfileActivity in a bundle
-     */
 }

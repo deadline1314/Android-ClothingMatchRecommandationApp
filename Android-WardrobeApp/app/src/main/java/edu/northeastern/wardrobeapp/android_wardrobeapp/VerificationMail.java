@@ -30,7 +30,7 @@ public class VerificationMail {
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             FirebaseAuth.getInstance().signOut();
-                            Toast.makeText(context," Check the inbox for the verification email. Click the link in the verification mail to verify and to continue with the signin.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(context, "Please check your inbox for the verification email.", Toast.LENGTH_LONG).show();
                         }
                         else
                         {

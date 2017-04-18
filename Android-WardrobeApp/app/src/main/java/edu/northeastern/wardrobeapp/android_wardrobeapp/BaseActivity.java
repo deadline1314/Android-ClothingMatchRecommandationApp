@@ -43,7 +43,7 @@ public class BaseActivity extends AppCompatActivity {
                 } else {
                     String currentActivity = mContext.getClass().getSimpleName();
                     Log.d(currentActivity, "Should log in");
-                    if (!currentActivity.equals("LoginActivity")) {
+                    if (!currentActivity.equals("LoginActivity") && !currentActivity.equals("SignupActivity")) {
                         // Ken: When no user is detected, ask for login
                         startActivity(new Intent(mContext, LoginActivity.class));
                     }
