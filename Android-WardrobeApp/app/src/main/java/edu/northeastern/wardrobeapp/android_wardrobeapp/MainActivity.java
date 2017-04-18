@@ -45,9 +45,6 @@ public class MainActivity extends BaseActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
-
-        // Welcome message
-        Toast.makeText(this, "Welcome!", Toast.LENGTH_SHORT).show();
     }
 
     public void AddClothing(View view) {
