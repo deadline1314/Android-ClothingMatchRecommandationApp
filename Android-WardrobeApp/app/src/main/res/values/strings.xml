@@ -25,7 +25,10 @@
     <string name="label_sign_up">Sign Up</string>
 
     <!-- Menu-related strings -->
+    <string name="menu_add_clothing">Add Clothing</string>
     <string name="menu_sign_out">Sign Out</string>
+
+    <!-- Login Activity -->
     <string name="email1">Email</string>
     <string name="password">Password</string>
     <string name="log_in">Log in</string>

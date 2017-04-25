@@ -6,6 +6,10 @@
         android:id="@+id/action_settings"
         android:title="@string/action_settings"
         app:showAsAction="never" />
-    <item android:id="@+id/menu_sign_out"
+    <item
+        android:id="@+id/menu_add_clothing"
+        android:title="@string/menu_add_clothing" />
+    <item
+        android:id="@+id/menu_sign_out"
         android:title="@string/menu_sign_out" />
 </menu>

@@ -47,11 +47,6 @@ public class MainActivity extends BaseActivity {
         tabLayout.setupWithViewPager(mViewPager);
     }
 
-    public void AddClothing(View view) {
-        startActivity(new Intent(this, AddClothingActivity.class));
-    }
-
-
     // Deleted PlaceholderFragment class from here
 
     /**

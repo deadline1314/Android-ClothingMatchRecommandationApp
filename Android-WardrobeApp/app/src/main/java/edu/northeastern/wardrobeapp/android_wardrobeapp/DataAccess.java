@@ -1,9 +1,15 @@
 package edu.northeastern.wardrobeapp.android_wardrobeapp;
 
+import android.util.Log;
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -13,8 +19,11 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
+
+import edu.northeastern.wardrobeapp.android_wardrobeapp.utils.Clothing;
 
 public class DataAccess {
     // Firebase variables
@@ -24,6 +33,11 @@ public class DataAccess {
     public DataAccess() {
         storageRef = FirebaseStorage.getInstance().getReference();
         dbRef = FirebaseDatabase.getInstance().getReference();
+    }
+
+    public void getWardrobe(String userId, ValueEventListener listener) {
+        dbRef.child("userdata").child(userId).child("wardrobe")
+                .addListenerForSingleValueEvent(listener);
     }
 
     // tODO: function to store detail data then upload file
