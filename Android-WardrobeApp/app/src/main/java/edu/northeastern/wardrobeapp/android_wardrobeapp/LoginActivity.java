@@ -17,6 +17,8 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends BaseActivity {
 
@@ -101,22 +103,20 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 progressDialog.dismiss();
-                    if (!task.isSuccessful()) {
-                        Toast toast = Toast.makeText(getBaseContext(),task.getException().getMessage(),Toast.LENGTH_SHORT);
-                        toast.setGravity(Gravity.CENTER_HORIZONTAL,0,0);
-                        toast.show();
-                        btnLogin.setEnabled(true);
-                    } else {
-                        onLoginSuccess();
-                        // TODO: Re-enable
-//                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-//                        if(!user.isEmailVerified()) {
-//                            setErrorDialog();
-//                        }
-//                        else
-//                            onLoginSuccess();
-//                        }
+                if (!task.isSuccessful()) {
+                    Toast toast = Toast.makeText(getBaseContext(),task.getException().getMessage(),Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.CENTER_HORIZONTAL,0,0);
+                    toast.show();
+                    btnLogin.setEnabled(true);
+                } else {
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    if(!user.isEmailVerified()) {
+                        setErrorDialog();
                     }
+                    else {
+                        onLoginSuccess();
+                    }
+                }
             }
         });
     }
